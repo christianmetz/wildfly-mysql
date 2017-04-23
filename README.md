@@ -51,6 +51,8 @@ Configure your environment:
 
 #### Appserver
 
+[Official WildFly image documentation](https://store.docker.com/community/images/jboss/wildfly)
+
 - WILDFLY_USER=admin
 - WILDFLY_PASS=adminPassword
 - Database configuration  
@@ -61,6 +63,8 @@ Configure your environment:
 	- DB_PASS=mysql
 
 #### Database
+
+[Official MySQL image documentation](https://store.docker.com/images/mysql)
 
 - MYSQL_DATABASE=sample
 - MYSQL_USER=mysql
