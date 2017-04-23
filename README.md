@@ -1,29 +1,34 @@
 # Wildfly MySQL DevStack
 
+[![Docker Build Status](https://img.shields.io/docker/build/metz/wildfly-mysql.svg)]()
+[![Docker Automated build](https://img.shields.io/docker/automated/metz/wildfly-mysql.svg)]()
+
 ## About
 
-This repo contains Continuous Integration Tools.  
+This repo contains the DevStack Dockerfile.  
 Your feedback is always welcome.
 
 ### Features
 
 The development stack consists of:
 
-- [x] **Wildfly**: Java EE application server, preconfigured with a MySQL datasource
+- [x] **Wildfly**: Java EE application server
+	- [x] Preconfigured [JNDI datasource]()
+	- [x] Administration Console
 - [x] **MySQL**: Relational database management system
 
 ### Requirements
 
-- Docker
+- [Docker](https://docs.docker.com/engine/installation/) (including docker-compose)
 
 ## Quick Start
 
 This section gives you a quick overview on how to get started.
 
-Start the environment by running:
+Boot the environment by running:
 
 ```sh
-# start the Docker `app` and `db` containers
+# starts the `app` and `db` containers
 $ docker-compose up
 ```
 
@@ -56,9 +61,9 @@ Configure your environment:
 - WILDFLY_USER=admin
 - WILDFLY_PASS=adminPassword
 - Database configuration  
-	*This config must match the one of the MySQL database.*
+	*This config must match the one of the MySQL database (name, user, password).*
 	- DB_NAME=sample  
-		the JNDI name follows the pattern: `/jdbc/datasources/<DB_NAME>DS`
+		**Important:** The JNDI name follows the pattern: `/jdbc/datasources/<DB_NAME>DS`
 	- DB_USER=mysql
 	- DB_PASS=mysql
 
@@ -70,7 +75,7 @@ Configure your environment:
 - MYSQL_USER=mysql
 - MYSQL_PASSWORD=mysql
 - MYSQL_ROOT_PASSWORD=supersecret
-	- The password for the MySQL `root` user.
+	- **Hint:** This is the password for the MySQL `root` user.
 
 ## Issues
 
@@ -78,10 +83,6 @@ Please submit issues through the *issue tracker* on GitHub.
 
 ## Development
 
-> Suggestions?
-
 ## Credits
 
-Copyright (c) 2017 - Programmed by Christian Metz
-
-Released under the [... License](LICENSE).
+Released under the [MIT License](LICENSE).
