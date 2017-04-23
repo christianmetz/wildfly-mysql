@@ -3,14 +3,13 @@ version: "2"
 services:
   app:
     container_name: "app"
-    image: "metz/wildfly"
+    image: "metz/wildfly-mysql:dev"
     environment:
       - WILDFLY_USER=admin
       - WILDFLY_PASS=adminPassword
       - DB_NAME=sample
       - DB_USER=mysql
       - DB_PASS=mysql
-      - DB_URI=db:3306
     depends_on:
       - db
     ports:
