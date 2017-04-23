@@ -1,7 +1,7 @@
 # Wildfly MySQL DevStack
 
-[![Docker Build Status](https://img.shields.io/docker/build/metz/wildfly-mysql.svg)]()
-[![Docker Automated build](https://img.shields.io/docker/automated/metz/wildfly-mysql.svg)]()
+[![Docker Build Status](https://img.shields.io/docker/build/metz/wildfly-mysql.svg)](https://hub.docker.com/r/metz/wildfly-mysql/)
+[![Docker Automated build](https://img.shields.io/docker/automated/metz/wildfly-mysql.svg)](https://hub.docker.com/r/metz/wildfly-mysql/)
 
 ## About
 
@@ -82,6 +82,8 @@ Configure your environment:
 Please submit issues through the *issue tracker* on GitHub.
 
 ## Development
+
+- https://mirocupak.com/configuring-a-datasource-on-wildfly/
 
 ## Credits
 
