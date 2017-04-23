@@ -7,14 +7,12 @@ services:
     environment:
       - WILDFLY_USER=admin
       - WILDFLY_PASS=adminPassword
-      - MYSQL_URI=db:3306
       - DB_NAME=sample
       - DB_USER=mysql
       - DB_PASS=mysql
+      - DB_URI=db:3306
     depends_on:
       - db
-    #volumes:
-      #- ./workdir/app/logs/:/glassfish3/glassfish/domains/basys/logs/
     ports:
       - "8080:8080" # application
       - "9990:9990" # admin console
@@ -26,7 +24,7 @@ services:
       - MYSQL_DATABASE=sample
       - MYSQL_USER=mysql
       - MYSQL_PASSWORD=mysql
-      - MYSQL_ROOT_PASSWORD=supersecret           # root user password
+      - MYSQL_ROOT_PASSWORD=supersecret
     volumes:
       - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
       - ./workdir/db/data/:/var/lib/mysql/              # data storage
