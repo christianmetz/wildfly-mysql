@@ -2,7 +2,7 @@
 
 # set environment variables
 JBOSS_CLI=$JBOSS_HOME/bin/jboss-cli.sh
-DATASOURCE=jdbc/datasources/${DB_NAME}DS
+DATASOURCE=java:/jdbc/datasources/${DB_NAME}DS
 
 function wait_for_server() {
   until `$JBOSS_CLI -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do
@@ -38,7 +38,7 @@ $JBOSS_CLI -c '/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,dr
 echo "=> Creating a new datasource: '${DATASOURCE}'"
 $JBOSS_CLI -c "data-source add \
   --name=${DB_NAME}DS \
-  --jndi-name=java:${DATASOURCE} \
+  --jndi-name=${DATASOURCE} \
   --user-name=${DB_USER} \
   --password=${DB_PASS} \
   --driver-name=mysql \
