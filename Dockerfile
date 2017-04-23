@@ -1,4 +1,4 @@
-# Pull base image
+# WildFly 8 on Docker with Centos 7 and OpenJDK 1.7
 FROM jboss/wildfly:latest
 
 # Maintainer
@@ -9,16 +9,15 @@ ENV WILDFLY_USER admin
 ENV WILDFLY_PASS adminPassword
 
 # Database
-# Datasource: ${MYSQL_DB}DS
 ENV DB_NAME sample
 ENV DB_USER mysql
 ENV DB_PASS mysql
-ENV MYSQL_URI=db:3306
+ENV DB_URI db:3306
 
 ENV MYSQL_VERSION 6.0.6
-ENV JBOSS_HOME /opt/jboss/wildfly
 ENV JBOSS_CLI /opt/jboss/wildfly/bin/jboss-cli.sh
-#JAVA_OPTS
+ENV DEPLOYMENT_DIR /opt/jboss/wildfly/standalone/deployments/
+#ENV JAVA_OPTS
 
 # Setting up WildFly Admin Console
 RUN echo "=> Adding WildFly administrator"
@@ -43,7 +42,7 @@ RUN echo "=> Starting WildFly server" && \
         --user-name=${DB_USER} \
         --password=${DB_PASS} \
         --driver-name=mysql \
-        --connection-url=jdbc:mysql://${MYSQL_URI}/${DB_NAME} \
+        --connection-url=jdbc:mysql://${DB_URI}/${DB_NAME} \
         --use-ccm=false \
         --max-pool-size=25 \
         --blocking-timeout-wait-millis=5000 \

@@ -1,6 +1,5 @@
 version: "2"
 
-#docker run -p 9990:9990 -p 8080:8080 metz/wildfly
 services:
   app:
     container_name: "app"
