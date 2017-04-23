@@ -21,11 +21,6 @@ $JBOSS_HOME/bin/standalone.sh &
 echo "=> Waiting for the server to boot"
 wait_for_server
 
-echo "=> Downloading MySQL driver"
-curl --location \
-     --output /tmp/mysql-connector-java-${MYSQL_VERSION}.jar \
-     --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar && \
-
 echo "=> Adding MySQL module"
 $JBOSS_CLI -c "module add \
   --name=com.mysql \
