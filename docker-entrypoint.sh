@@ -1,38 +1,31 @@
 #!/bin/bash
 
-# set environment variables
+# Set environment variables
 JBOSS_CLI=$JBOSS_HOME/bin/jboss-cli.sh
 DATASOURCE=java:/jdbc/datasources/${DB_NAME}DS
 
-function wait_for_server() {
-  until `$JBOSS_CLI -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do
-    sleep 1
-  done
-}
-
-# Setting up WildFly admin user
-echo "=> Adding WildFly administrator"
+# Setup WildFly admin user
+echo "=> Add WildFly administrator"
 $JBOSS_HOME/bin/add-user.sh -u $WILDFLY_USER -p $WILDFLY_PASS --silent
 
-# the server must be started before configuring a new datasource
-echo "=> Starting WildFly server"
-$JBOSS_HOME/bin/standalone.sh &
+# Configure datasource
+echo "=> Create datasource: '${DATASOURCE}'"
+$JBOSS_CLI << EOF
+embed-server --server-config=standalone.xml
+batch
 
-echo "=> Waiting for the server to boot"
-wait_for_server
-
-echo "=> Adding MySQL module"
-$JBOSS_CLI -c "module add \
+# Add MySQL module
+module add \
   --name=com.mysql \
   --resources=/tmp/mysql-connector-java-${MYSQL_VERSION}.jar \
-  --dependencies=javax.api,javax.transaction.api"
+  --dependencies=javax.api,javax.transaction.api
 
-echo "=> Adding MySQL driver"
-$JBOSS_CLI -c '/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource)'
+# Configure driver
+/subsystem=datasources/jdbc-driver=mysql:add(driver-name="mysql",driver-module-name="com.mysql",driver-class-name="com.mysql.cj.jdbc.Driver")
 
-echo "=> Creating a new datasource: '${DATASOURCE}'"
-$JBOSS_CLI -c "data-source add \
-  --name=${DB_NAME}DS \
+# Add new datasource
+data-source add \
+  --name=${DB_NAME}Pool \
   --jndi-name=${DATASOURCE} \
   --user-name=${DB_USER} \
   --password=${DB_PASS} \
@@ -41,16 +34,21 @@ $JBOSS_CLI -c "data-source add \
   --use-ccm=false \
   --max-pool-size=25 \
   --blocking-timeout-wait-millis=5000 \
-  --enabled=true"
+  --enabled=true
 
-echo "=> Shutting down WildFly"
-$JBOSS_CLI -c ":shutdown"
+# Execute the batch
+run-batch
+reload
+stop-embedded-server
+EOF
 
-echo "=> Cleaning up"
-rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/ $JBOSS_HOME/standalone/log/*
-rm -f /tmp/*.jar
-unset $WILDFLY_USER $WILDFLY_PASS $DB_NAME $DB_USER $DB_PASS $DATASOURCE
+echo "=> Clean up"
+## FIX for Error: WFLYCTL0056: Could not rename /opt/jboss/wildfly/standalone/configuration/standalone_xml_history/current...
+rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/* \
+       $JBOSS_HOME/standalone/log/* \
+       /tmp/*.jar
+unset WILDFLY_USER WILDFLY_PASS DB_NAME DB_USER DB_PASS DATASOURCE
 
-echo "=> Restarting WildFly"
+echo "=> Start WildFly"
 # Boot WildFly in standalone mode and bind it to all interfaces (enable admin console)
 $JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
