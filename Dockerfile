@@ -14,8 +14,8 @@ RUN echo "=> Download MySQL driver" && \
          --output /tmp/mysql-connector-java-${MYSQL_VERSION}.jar \
          --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar
 
-# Expose http and admin ports
-EXPOSE 8080 9990
+# Expose the web, admin and debug port
+EXPOSE 8080 9990 8787
 
 ADD docker-entrypoint.sh /opt/jboss/wildfly/customization/
 CMD ["/opt/jboss/wildfly/customization/docker-entrypoint.sh"]

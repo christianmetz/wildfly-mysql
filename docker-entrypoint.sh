@@ -50,5 +50,5 @@ rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/* \
 unset WILDFLY_USER WILDFLY_PASS DB_NAME DB_USER DB_PASS DATASOURCE
 
 echo "=> Start WildFly"
-# Boot WildFly in standalone mode and bind it to all interfaces (enable admin console)
-$JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+# Boot WildFly in standalone mode and bind it to all interfaces (enable admin console and debug)
+$JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 --debug
